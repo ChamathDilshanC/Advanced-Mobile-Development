@@ -1,65 +1,59 @@
-import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
-import {registerUser} from "../../services/authService";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({ email: "", password: "" });
+
+  const handleRegister = async () => {
+    setLoading(true);
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      console.log("Registered:", form);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <View className="items-center justify-center flex-1 px-6 bg-white">
-      <View className="w-full max-w-md gap-5 p-6 bg-gray-100 rounded-lg shadow">
-        <Text className="mb-6 text-2xl font-bold text-center text-gray-900">
-          Sign Up To Log Your Account In Task Manager
-        </Text>
+    <View className="justify-center flex-1 p-5 bg-gray-100">
+      <Text className="mb-5 text-2xl font-bold">Register</Text>
 
-        <TextInput
-          className="w-full h-12 px-4 mt-6 mb-4 bg-white border border-gray-300 rounded-lg"
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-        />
+      <TextInput
+        className="p-3 mb-4 bg-white rounded-lg"
+        placeholder="Email"
+        value={form.email}
+        onChangeText={(text) => setForm({ ...form, email: text })}
+      />
 
-        <TextInput
-          className="w-full h-12 px-4 mb-6 bg-white border border-gray-300 rounded-lg"
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
+      <TextInput
+        className="p-3 mb-6 bg-white rounded-lg"
+        placeholder="Password"
+        secureTextEntry
+        value={form.password}
+        onChangeText={(text) => setForm({ ...form, password: text })}
+      />
 
-        <TouchableOpacity className="items-center justify-center w-full h-12 bg-blue-600 rounded-lg"
-          onPress={() => {
-            registerUser(email, password)
-              .then(() => {
-                router.back();
-                Alert.alert("Registration Successful", "You can now log in with your new account.");
-              })
-              .catch((error) => {
-                console.error("Registration error:", error);
-                Alert.alert("Registration Error", "There was an error creating your account. Please try again.");
-              })
-              .finally(() => {
-                setEmail("")
-                setPassword("")
-              });
-          }}
-        >
-          <Text className="text-lg font-semibold text-white">SignUp</Text>
-        </TouchableOpacity>
-
-        <Text className="mt-4 text-sm text-center text-gray-600">
-          Have an account?{" "}
-          <Text
-            className="text-blue-600"
-            onPress={() => router.push("/(auth)/login")}
-          >
-            Login
-          </Text>
-        </Text>
-      </View>
+      <TouchableOpacity
+        className={`bg-blue-500 p-4 rounded-lg items-center ${loading ? "opacity-70" : ""}`}
+        onPress={handleRegister}
+        disabled={loading}
+      >
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text className="text-lg font-bold text-white">Register</Text>
+        )}
+      </TouchableOpacity>
     </View>
   );
 };

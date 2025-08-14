@@ -7,13 +7,34 @@ import {
   TouchableOpacity,
   Pressable,
   Alert,
+  ActivityIndicator,
 } from "react-native";
-import {loginUser} from "../../services/authService";
+import { loginUser } from "../../services/authService";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const handleLogin = () => {
+    setLoading(true);
+    loginUser(username, password)
+      .then(() => {
+        Alert.alert("Login Successful", "Welcome back to Task Manager!");
+        router.push("../(dashboard)/dashboard");
+      })
+      .catch((error) => {
+        Alert.alert(
+          "Login Error",
+          "Invalid username or password. Please try again."
+        );
+        console.error("Login error:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <View className="items-center justify-center flex-1 px-6 bg-white">
@@ -37,20 +58,16 @@ const Login = () => {
           secureTextEntry
         />
 
-        <TouchableOpacity className="items-center justify-center w-full h-12 bg-blue-600 rounded-lg"
-          onPress={() => {
-            loginUser(username, password)
-              .then(() => {
-                Alert.alert("Login Successful", "Welcome back to Task Manager!");
-                router.push("../(dashboard)/dashboard");
-              })
-              .catch((error) => {
-                Alert.alert("Login Error", "Invalid username or password. Please try again.");
-                console.error("Login error:", error);
-              });
-          }}
+        <TouchableOpacity
+          className={`items-center justify-center w-full h-12 rounded-lg bg-blue-600 ${loading ? "opacity-70" : ""}`}
+          onPress={handleLogin}
+          disabled={loading}
         >
-          <Text className="text-lg font-semibold text-white">Login</Text>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text className="text-lg font-semibold text-white">Login</Text>
+          )}
         </TouchableOpacity>
 
         <Pressable className="mt-4">

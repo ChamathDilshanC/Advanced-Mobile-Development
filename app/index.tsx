@@ -1,9 +1,34 @@
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "expo-router";
-import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 
 const Index = () => {
   const router = useRouter();
+  const { user, loading } = useAuth();
+
+
+
+  useEffect(() => {
+    if (!loading) {
+      if (user) {
+        router.replace("/(dashboard)/dashboard");
+        console.log("user", user);
+      }else{
+        router.replace("/(auth)/login");
+      }
+    }
+
+  }, [user ,loading])
+
+  if(loading) {
+    return (
+      <View className="items-center justify-center flex-1 bg-gray-100">
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text className="mt-4 text-lg font-bold">Loading...</Text>
+      </View>
+    )
+  }
 
   return (
     <View className="items-center justify-center flex-1 bg-gray-100">

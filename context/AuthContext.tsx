@@ -1,19 +1,26 @@
-import React, { createContext, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { createContext, useEffect, useState } from 'react';
+import { onAuthStateChanged, User } from "firebase/auth";
+import { auth } from "@/firebase";
 
-const AuthContext = createContext<any>(null);
+
+const AuthContext = createContext<{ user: User | null; loading : boolean}>({ user: null, loading: true });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-const [isUser, setUser] = useState(false)
-
-const login = () =>  setUser(true)
-
-const logout = () =>  setUser(false)
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    console.log("Auth state changed:", user);
+    setUser(user ?? null);
+    setLoading(false);
+  });
+  return unsubscribe;
+}, []);
 
 
   return (
-    <AuthContext.Provider value={{ isUser, login, logout }}>
+    <AuthContext.Provider value={{ user, loading }}>
       {children}
     </AuthContext.Provider>
   );

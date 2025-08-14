@@ -1,14 +1,8 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Pressable,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
 
-const Login = () => {
+const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -17,7 +11,7 @@ const Login = () => {
     <View className="items-center justify-center flex-1 px-6 bg-white">
       <View className="w-full max-w-md gap-5 p-6 bg-gray-100 rounded-lg shadow">
         <Text className="mb-6 text-2xl font-bold text-center text-gray-900">
-          Sign in To Account In Task Manager
+          Sign Up To Log Your Account In Task Manager
         </Text>
 
         <TextInput
@@ -36,23 +30,21 @@ const Login = () => {
         />
 
         <TouchableOpacity className="items-center justify-center w-full h-12 bg-blue-600 rounded-lg">
-          <Text className="text-lg font-semibold text-white">Login</Text>
+          <Text className="text-lg font-semibold text-white">SignUp</Text>
         </TouchableOpacity>
 
-        <Pressable className="mt-4">
-          <Text className="text-sm text-center text-gray-600">
-            Don't have an account?{" "}
-            <Text
-              className="text-blue-600"
-              onPress={() => router.push("/(auth)/register")}
-            >
-              Register
-            </Text>
+        <Text className="mt-4 text-sm text-center text-gray-600">
+          Have an account?{" "}
+          <Text
+            className="text-blue-600"
+            onPress={() => router.push("/(auth)/login")}
+          >
+            Login
           </Text>
-        </Pressable>
+        </Text>
       </View>
     </View>
   );
 };
 
-export default Login;
+export default Register;

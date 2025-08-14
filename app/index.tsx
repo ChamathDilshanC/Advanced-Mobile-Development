@@ -1,25 +1,29 @@
-import { Redirect, useRouter } from "expo-router";
-import { useAuth } from "@/context/AuthContext";
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { useRouter } from "expo-router";
+import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 
-const index = () => {
-  const { isUser } = useAuth(); // or: const isUser = useAuth(); if useAuth returns a single value
+const Index = () => {
   const router = useRouter();
-  console.log("isUser", isUser);
-/*   useEffect(() => {
-    if (!isUser) {
-      console.log({ isUser });
-      router.replace("/login");
-    }else{
-      router.replace("/home");
-    }
-  }, [isUser]); */
 
-return(
-  <Redirect href={isUser ? "/home" : "/login"} />
-)
+  return (
+    <View className="items-center justify-center flex-1 bg-gray-100">
+      <Text className="text-lg font-bold">Hello There !!!</Text>
+
+      <TouchableOpacity
+        onPress={() => router.push("/")}
+        className="p-4 mt-4 bg-blue-500 rounded-lg"
+      >
+        <Text className="text-white">Go To Index</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => router.push("/(auth)/login")}
+        className="p-4 mt-4 bg-green-500 rounded-lg"
+      >
+        <Text className="text-white">Go To Login</Text>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
-
-export default index;
+export default Index;

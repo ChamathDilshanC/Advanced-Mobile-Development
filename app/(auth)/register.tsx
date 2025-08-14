@@ -1,9 +1,10 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import {registerUser} from "../../services/authService";
 
 const Register = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
@@ -16,9 +17,9 @@ const Register = () => {
 
         <TextInput
           className="w-full h-12 px-4 mt-6 mb-4 bg-white border border-gray-300 rounded-lg"
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
         />
 
         <TextInput
@@ -29,7 +30,23 @@ const Register = () => {
           secureTextEntry
         />
 
-        <TouchableOpacity className="items-center justify-center w-full h-12 bg-blue-600 rounded-lg">
+        <TouchableOpacity className="items-center justify-center w-full h-12 bg-blue-600 rounded-lg"
+          onPress={() => {
+            registerUser(email, password)
+              .then(() => {
+                router.back();
+                Alert.alert("Registration Successful", "You can now log in with your new account.");
+              })
+              .catch((error) => {
+                console.error("Registration error:", error);
+                Alert.alert("Registration Error", "There was an error creating your account. Please try again.");
+              })
+              .finally(() => {
+                setEmail("")
+                setPassword("")
+              });
+          }}
+        >
           <Text className="text-lg font-semibold text-white">SignUp</Text>
         </TouchableOpacity>
 

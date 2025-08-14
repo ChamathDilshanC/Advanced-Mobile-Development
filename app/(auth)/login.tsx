@@ -6,7 +6,9 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
+  Alert,
 } from "react-native";
+import {loginUser} from "../../services/authService";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -35,7 +37,19 @@ const Login = () => {
           secureTextEntry
         />
 
-        <TouchableOpacity className="items-center justify-center w-full h-12 bg-blue-600 rounded-lg">
+        <TouchableOpacity className="items-center justify-center w-full h-12 bg-blue-600 rounded-lg"
+          onPress={() => {
+            loginUser(username, password)
+              .then(() => {
+                Alert.alert("Login Successful", "Welcome back to Task Manager!");
+                router.push("../(dashboard)/dashboard");
+              })
+              .catch((error) => {
+                Alert.alert("Login Error", "Invalid username or password. Please try again.");
+                console.error("Login error:", error);
+              });
+          }}
+        >
           <Text className="text-lg font-semibold text-white">Login</Text>
         </TouchableOpacity>
 

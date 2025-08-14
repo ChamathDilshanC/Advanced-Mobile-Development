@@ -13,7 +13,15 @@ const DashboardLayout = () => {
   ];
 
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarStyle: { backgroundColor: "#fff" },
+        headerShown: false,
+        tabBarActiveTintColor: "#6200ee",
+        tabBarInactiveTintColor: "#999",
+        tabBarLabelStyle: { fontSize: 12 },
+      }}
+    >
       {tabs.map(({ label, icon, name }) => (
         <Tabs.Screen
           key={name}

@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL = process.env.API_BASE_URL || "https://689ec7b73fed484cf877f331.mockapi.io/api/v1";
+const baseURL = process.env.API_BASE_URL || "Your Mock data url";
 
 const api = axios.create({
   baseURL,

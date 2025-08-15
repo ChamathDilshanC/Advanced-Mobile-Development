@@ -37,3 +37,8 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+[newline]
+# Ignore environment files
+.env
+# Ignore Firebase config
+firebase.ts

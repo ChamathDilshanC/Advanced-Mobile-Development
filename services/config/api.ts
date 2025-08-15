@@ -1,5 +1,10 @@
 import axios from "axios";
-const baseURL = process.env.API_BASE_URL || "Your Mock data url";
+const baseURL =
+  process.env.EXPO_PUBLIC_API_BASE_URL ||
+  process.env.API_BASE_URL ||
+  "https://689ec7b73fed484cf877f331.mockapi.io/api/v1/";
+console.log("Using API Base URL:", baseURL);
+console.log("Available env vars:", process.env);
 
 const api = axios.create({
   baseURL,
@@ -7,7 +12,6 @@ const api = axios.create({
 });
 
 console.log("Using API Base URL:", baseURL);
-
 
 api.interceptors.request.use(
   async (config) => {

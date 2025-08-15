@@ -9,7 +9,7 @@ const DashboardLayout = () => {
     { label: "Profile", icon: "account-circle", name: "profile" },
     { label: "Settings", icon: "settings-suggest", name: "settings" },
     { label: "Dashboard", icon: "flutter-dash", name: "dashboard" },
-    { label: "Tasks", icon: "add-task", name: "tasks" },
+    { label: "Tasks", icon: "task-alt", name: "tasks" },
   ];
 
   return (

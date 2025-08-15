@@ -16,9 +16,9 @@ const Profile = () => {
     value: string;
     icon: MaterialIconName;
   }[] = [
-    { title: "Email", value: "john.doe@example.com", icon: "email" },
-    { title: "Phone", value: "+1 234 567 8900", icon: "phone" },
-    { title: "Location", value: "New York, USA", icon: "location-on" },
+    { title: "Email", value: "Chamath@example.com", icon: "email" },
+    { title: "Phone", value: "+94 775 6161 04", icon: "phone" },
+    { title: "Location", value: "Aluthgama , Sri Lanka", icon: "location-on" },
     { title: "Department", value: "Engineering", icon: "work" },
   ];
 
@@ -43,7 +43,7 @@ const Profile = () => {
           <View className="items-center justify-center w-20 h-20 mb-4 bg-gray-200 rounded-full">
             <MaterialIcons name="person" size={40} color="#6200ee" />
           </View>
-          <Text className="text-xl font-semibold text-gray-800">John Doe</Text>
+          <Text className="text-xl font-semibold text-gray-800">Chamath Dilshan</Text>
           <Text className="text-gray-600">Senior Developer</Text>
         </View>
 

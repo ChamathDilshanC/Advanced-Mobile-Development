@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { addTask, getTasks } from "@/services/taskservice";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  ScrollView,
-  TextInput,
+  Alert,
   Button,
   SafeAreaView,
-  Alert,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
-import { getTasks, addTask } from "@/services/taskservice";
 
 interface Task {
   id: string;

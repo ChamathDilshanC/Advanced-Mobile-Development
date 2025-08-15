@@ -6,12 +6,7 @@ import { getAuth } from "firebase/auth/web-extension";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCMCn27C-9IzKYfAX3NGUkcDvBAYnzXzf4",
-  authDomain: "taskmanagerapplication-8c289.firebaseapp.com",
-  projectId: "taskmanagerapplication-8c289",
-  storageBucket: "taskmanagerapplication-8c289.firebasestorage.app",
-  messagingSenderId: "111384695112",
-  appId: "1:111384695112:web:b7464d17c2e8823381a37d",
+  //TODO : Add Your Firebase Details 
 };
 
 // Initialize Firebase

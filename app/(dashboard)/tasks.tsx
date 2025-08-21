@@ -1,3 +1,4 @@
+import { useLoader } from "@/context/LoaderContext";
 import {
   addTask,
   deleteTask,
@@ -26,9 +27,11 @@ const TaskScreen = () => {
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
+  const { showLoader, hideLoader } = useLoader();
+
   // Get task by ID
   const handleGetTaskById = async (id: string) => {
-    setLoading(true);
+    showLoader();
     setError(null);
     try {
       const task = await getTaskById(id);
@@ -42,7 +45,7 @@ const TaskScreen = () => {
     } catch (error) {
       setError("Failed to fetch task. Please try again.");
     } finally {
-      setLoading(false);
+      hideLoader();
     }
   };
 
@@ -53,6 +56,7 @@ const TaskScreen = () => {
       setError("Task title is required");
       return;
     }
+    showLoader();
     setError(null);
     try {
       await updateTask(editingTaskId, {
@@ -65,27 +69,32 @@ const TaskScreen = () => {
       setEditingTaskId(null);
       setEditTitle("");
       setEditDescription("");
-      handleFetchData();
+      await handleFetchData();
     } catch (error) {
       setError("Failed to update task. Please try again.");
+    } finally {
+      hideLoader();
     }
   };
 
   // Delete task
   const handleDeleteTask = async (id: string) => {
+    showLoader();
     setError(null);
     try {
       await deleteTask(id);
       Alert.alert("Success", "Task deleted successfully");
-      handleFetchData();
+      await handleFetchData();
     } catch (error) {
       setError("Failed to delete task. Please try again.");
+    } finally {
+      hideLoader();
     }
   };
 
   // Fetch tasks from REST API
   const handleFetchData = async () => {
-    setLoading(true);
+    showLoader();
     setError(null);
     try {
       const data = await getTasks();
@@ -93,7 +102,7 @@ const TaskScreen = () => {
     } catch (error) {
       setError("Failed to load tasks. Please try again.");
     } finally {
-      setLoading(false);
+      hideLoader();
     }
   };
 
@@ -103,16 +112,19 @@ const TaskScreen = () => {
       setError("Task title is required");
       return;
     }
+    showLoader();
     setError(null); // Clear previous errors
     try {
       await addTask({ title, description });
       Alert.alert("Success", "Task added successfully");
       setTitle("");
       setDescription("");
-      handleFetchData();
+      await handleFetchData();
     } catch (error) {
       console.error("Add task error:", error);
       setError("Failed to add task. Please try again.");
+    } finally {
+      hideLoader();
     }
   };
 
@@ -127,9 +139,9 @@ const TaskScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gradient-to-b from-blue-50 to-white">
+    <SafeAreaView className="flex-1 mt-5 bg-gradient-to-b from-blue-50 to-white">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="p-4">
-        <View className="mb-6">
+        <View className="mb-6 mt-9">
           <Text className="mb-4 text-2xl font-bold text-center text-blue-700">
             Task Manager
           </Text>

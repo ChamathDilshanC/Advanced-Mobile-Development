@@ -2,12 +2,15 @@ import React from 'react';
 import "./../global.css";
 import { Slot, Stack } from "expo-router";
 import { AuthProvider } from "@/context/AuthContext";
+import { LoaderProvider } from "@/context/LoaderContext";
 
 const RootLayout = () => {
   return (
-    <AuthProvider>
-      <Slot />
-    </AuthProvider>
+    <LoaderProvider>
+      <AuthProvider>
+        <Slot />
+      </AuthProvider>
+    </LoaderProvider>
   );
 };
 

@@ -83,7 +83,7 @@ const Settings = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
-      <ScrollView className="p-4">
+      <ScrollView className="p-4 mt-8">
         <Text className="mb-6 text-2xl font-bold text-gray-800">Settings</Text>
 
         {settingsSection.map((section, sectionIndex) => (

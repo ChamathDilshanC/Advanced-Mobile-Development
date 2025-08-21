@@ -1,26 +1,23 @@
-import api from "./config/api";
-
-interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  createdAt: number;
-}
+import { db } from "@/firebase";
+import { Task } from "@/types/task";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 
 export const getTasks = async (): Promise<Task[]> => {
   try {
-    console.log("getTasks: Making API call...");
-    const response = await api.get<Task[]>("/tasks");
-    console.log("getTasks: Response status:", response.status);
-    console.log("getTasks: Response data:", response.data);
-    return response.data;
-  } catch (error: any) {
-    console.error("Error in getTasks:", error);
-    console.error("Error details:", {
-      message: error?.message,
-      response: error?.response?.data,
-      status: error?.response?.status,
+    const querySnapshot = await getDocs(collection(db, "tasks"));
+    const tasks: Task[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      tasks.push({
+        id: doc.id,
+        title: data.title,
+        description: data.description ?? "",
+        createdAt: data.createdAt ?? null,
+      });
     });
+    return tasks;
+  } catch (error) {
+    console.error("Error fetching tasks from Firestore:", error);
     throw new Error("Failed to fetch tasks");
   }
 };
@@ -33,10 +30,25 @@ export const addTask = async (task: {
     if (!task.title.trim()) {
       throw new Error("Task title is required");
     }
-    const response = await api.post<Task>("/tasks", task);
-    return response.data;
+    const createdAt = Date.now();
+    const docRef = await addDoc(collection(db, "tasks"), {
+      title: task.title,
+      description: task.description ?? "",
+      createdAt,
+    });
+    return {
+      id: docRef.id,
+      title: task.title,
+      description: task.description ?? "",
+      createdAt,
+    };
   } catch (error) {
-    console.error("Error in addTask:", error);
+    console.error("Error adding task to Firestore:", error);
     throw new Error("Failed to add task");
   }
 };
+
+
+export const updateTask =  () => {
+  
+}

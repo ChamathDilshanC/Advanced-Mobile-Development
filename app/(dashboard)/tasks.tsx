@@ -1,4 +1,5 @@
 import { addTask, getTasks } from "@/services/taskservice";
+import { Task } from "@/types/task";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -10,13 +11,6 @@ import {
   View,
 } from "react-native";
 
-interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  createdAt: number;
-}
-
 const TaskScreen = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +18,7 @@ const TaskScreen = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  // Fetch tasks from API
+  // Fetch tasks from Firestore
   const handleFetchData = async () => {
     setLoading(true);
     setError(null);
@@ -62,10 +56,10 @@ const TaskScreen = () => {
     handleFetchData();
   }, []);
 
-  const formatDate = (timestamp: number) => {
+  const formatDate = (timestamp?: number) => {
     return Number.isFinite(timestamp)
-      ? new Date(timestamp * 1000).toLocaleString()
-      : "Invalid date";
+      ? new Date(timestamp!).toLocaleString()
+      : "No date";
   };
 
   return (

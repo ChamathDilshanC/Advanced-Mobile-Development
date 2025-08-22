@@ -1,4 +1,5 @@
 import { useLoader } from "@/context/LoaderContext";
+import { db } from "@/firebase";
 import {
   addTask,
   deleteTask,
@@ -7,6 +8,7 @@ import {
   updateTask,
 } from "@/services/taskservice";
 import { Task } from "@/types/task";
+import { collection, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -20,7 +22,7 @@ import {
 
 const TaskScreen = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Removed local loading state, use loader context instead
   const [error, setError] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -128,8 +130,32 @@ const TaskScreen = () => {
     }
   };
 
+  // Real-time Firestore updates
   useEffect(() => {
-    handleFetchData();
+    showLoader();
+    setError(null);
+    const unsubscribe = onSnapshot(
+      collection(db, "tasks"),
+      (querySnapshot) => {
+        const tasksArr: Task[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          tasksArr.push({
+            id: doc.id,
+            title: data.title,
+            description: data.description ?? "",
+            createdAt: data.createdAt ?? null,
+          });
+        });
+        setTasks(tasksArr);
+        hideLoader();
+      },
+      (error) => {
+        setError("Failed to load tasks. Please try again.");
+        hideLoader();
+      }
+    );
+    return () => unsubscribe();
   }, []);
 
   const formatDate = (timestamp?: number) => {
@@ -203,18 +229,14 @@ const TaskScreen = () => {
           )}
         </View>
 
-        {loading && (
-          <Text className="text-base text-center text-blue-500">
-            Loading...
-          </Text>
-        )}
+        {/* Loader context will handle loading UI globally */}
         {error && (
           <Text className="mb-2 text-base text-center text-red-500">
             {error}
           </Text>
         )}
 
-        {!loading && !error && tasks.length > 0
+        {!error && tasks.length > 0
           ? tasks.map((task) => (
               <View
                 key={task.id}
@@ -249,8 +271,7 @@ const TaskScreen = () => {
                 </View>
               </View>
             ))
-          : !loading &&
-            !error && (
+          : !error && (
               <Text className="text-base text-center text-gray-500">
                 No tasks found
               </Text>
